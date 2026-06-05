@@ -1,26 +1,18 @@
 const { Router } = require("express");
 const router = Router();
-const {
-  addToCart,
-  getCarts,
-  getCartByUserId,
-  getCartById,
-  updateCart,
-  removeFromCart,
-} = require("../controllers/cart.controller");
+const { createCart, getCarts, getCartById, updateCart, deleteCart } = require("../controllers/cart.controller");
 
 /**
  * @swagger
  * tags:
  *   name: Carts
- *   description: Savatchani boshqarish
+ *   description: Carts
  */
 
 /**
  * @swagger
- * /carts/add:
+ * /carts/createCart:
  *   post:
- *     summary: Savatchaga mahsulot qo'shish
  *     tags: [Carts]
  *     requestBody:
  *       required: true
@@ -28,60 +20,37 @@ const {
  *         application/json:
  *           schema:
  *             type: object
- *             required: [user_id, product_id, quantity]
+ *             required: [user_id, card_id]
  *             properties:
- *               user_id: { type: integer, example: 1 }
- *               product_id: { type: integer, example: 1 }
- *               quantity: { type: integer, example: 2 }
+ *               user_id: { type: integer }
+ *               card_id: { type: integer }
  *     responses:
- *       201: { description: Qo'shildi }
- *       400: { description: Xato ma'lumot }
+ *       201: { description: OK }
  */
-router.post("/add", addToCart);
+router.post("/createCart", createCart);
 
 /**
  * @swagger
  * /carts/getCarts:
  *   get:
- *     summary: Barcha savatchalarni olish
  *     tags: [Carts]
  *     responses:
- *       200: { description: Ro'yxat }
+ *       200: { description: OK }
  */
 router.get("/getCarts", getCarts);
 
 /**
  * @swagger
- * /carts/user/{userId}:
- *   get:
- *     summary: User ID bo'yicha savatchani olish
- *     tags: [Carts]
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         schema: { type: integer }
- *         example: 1
- *     responses:
- *       200: { description: Muvaffaqiyatli }
- */
-router.get("/user/:userId", getCartByUserId);
-
-/**
- * @swagger
  * /carts/getCart/{id}:
  *   get:
- *     summary: ID bo'yicha savatcha elementini olish
  *     tags: [Carts]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema: { type: integer }
- *         example: 1
  *     responses:
- *       200: { description: Topildi }
- *       404: { description: Topilmadi }
+ *       200: { description: OK }
  */
 router.get("/getCart/:id", getCartById);
 
@@ -89,41 +58,38 @@ router.get("/getCart/:id", getCartById);
  * @swagger
  * /carts/updateCart/{id}:
  *   put:
- *     summary: Savatchadagi mahsulot miqdorini yangilash
  *     tags: [Carts]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema: { type: integer }
- *         example: 1
  *     requestBody:
  *       content:
  *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               quantity: { type: integer, example: 5 }
+ *               user_id: { type: integer }
+ *               card_id: { type: integer }
  *     responses:
- *       200: { description: Yangilandi }
+ *       200: { description: OK }
  */
 router.put("/updateCart/:id", updateCart);
 
 /**
  * @swagger
- * /carts/remove/{id}:
+ * /carts/deleteCart/{id}:
  *   delete:
- *     summary: Savatchadan mahsulotni o'chirish
  *     tags: [Carts]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema: { type: integer }
- *         example: 1
  *     responses:
- *       204: { description: O'chirildi }
+ *       204: { description: OK }
  */
-router.delete("/remove/:id", removeFromCart);
+router.delete("/deleteCart/:id", deleteCart);
 
 module.exports = router;

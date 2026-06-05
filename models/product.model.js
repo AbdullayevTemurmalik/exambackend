@@ -1,39 +1,19 @@
 module.exports = (sequelize, DataType) => {
-  const Product = sequelize.define("Product", {
-    id: {
-      type: DataType.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    name: {
-      type: DataType.STRING,
-      allowNull: false,
-    },
-    description: {
-      type: DataType.TEXT,
-    },
-    price: {
-      type: DataType.DECIMAL(10, 2),
-      allowNull: false,
-    },
-    imageUrl: {
-      type: DataType.TEXT, // Changed from STRING to TEXT for long URLs
-      allowNull: true,
-    },
-    manufactureDate: {
-      type: DataType.DATE,
-    },
-    category_id: {
-      type: DataType.INTEGER,
-    },
+  const Card = sequelize.define("Card", {
+    id: { type: DataType.INTEGER, autoIncrement: true, primaryKey: true },
+    image: { type: DataType.STRING, allowNull: true },
+    price: { type: DataType.INTEGER, allowNull: false },
+    description: { type: DataType.STRING },
+    category_id: { type: DataType.INTEGER },
+    discount: { type: DataType.INTEGER },
+    stars: { type: DataType.INTEGER },
   });
 
-  Product.associate = (models) => {
-    Product.belongsTo(models.Category, { foreignKey: "category_id", as: "category", constraints: false });
-    Product.hasMany(models.Cart, { foreignKey: "product_id", as: "carts", constraints: false });
-    Product.hasMany(models.Like, { foreignKey: "product_id", as: "likes", constraints: false });
-    Product.hasMany(models.OrderItem, { foreignKey: "product_id", as: "orderItems", constraints: false });
+  Card.associate = (models) => {
+    Card.belongsTo(models.Category, { foreignKey: "category_id", as: "category", constraints: false });
+    Card.hasMany(models.Cart, { foreignKey: "card_id", as: "carts", constraints: false });
+    Card.hasMany(models.Like, { foreignKey: "product_id", as: "likes", constraints: false });
   };
 
-  return Product;
+  return Card;
 };

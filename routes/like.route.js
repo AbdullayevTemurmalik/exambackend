@@ -1,25 +1,18 @@
 const { Router } = require("express");
 const router = Router();
-const {
-  addLike,
-  getLikes,
-  getLikesByUserId,
-  getLikeById,
-  removeLike,
-} = require("../controllers/like.controller");
+const { createLike, getLikes, getLikeById, updateLike, deleteLike } = require("../controllers/like.controller");
 
 /**
  * @swagger
  * tags:
  *   name: Likes
- *   description: Yoqtirilgan mahsulotlar (Wishlist)
+ *   description: Likes
  */
 
 /**
  * @swagger
- * /likes/add:
+ * /likes/createLike:
  *   post:
- *     summary: Mahsulotga like bosish
  *     tags: [Likes]
  *     requestBody:
  *       required: true
@@ -29,74 +22,74 @@ const {
  *             type: object
  *             required: [user_id, product_id]
  *             properties:
- *               user_id: { type: integer, example: 1 }
- *               product_id: { type: integer, example: 2 }
+ *               user_id: { type: integer }
+ *               product_id: { type: integer }
  *     responses:
- *       201: { description: Like bosildi }
+ *       201: { description: OK }
  */
-router.post("/add", addLike);
+router.post("/createLike", createLike);
 
 /**
  * @swagger
  * /likes/getLikes:
  *   get:
- *     summary: Barcha likelarni olish
  *     tags: [Likes]
  *     responses:
- *       200: { description: Ro'yxat }
+ *       200: { description: OK }
  */
 router.get("/getLikes", getLikes);
 
 /**
  * @swagger
- * /likes/user/{userId}:
- *   get:
- *     summary: User ID bo'yicha likelarni olish
- *     tags: [Likes]
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         schema: { type: integer }
- *         example: 1
- *     responses:
- *       200: { description: Ro'yxat }
- */
-router.get("/user/:userId", getLikesByUserId);
-
-/**
- * @swagger
  * /likes/getLike/{id}:
  *   get:
- *     summary: ID bo'yicha likeni olish
  *     tags: [Likes]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema: { type: integer }
- *         example: 1
  *     responses:
- *       200: { description: Topildi }
- *       404: { description: Topilmadi }
+ *       200: { description: OK }
  */
 router.get("/getLike/:id", getLikeById);
 
 /**
  * @swagger
- * /likes/remove/{id}:
- *   delete:
- *     summary: Liken'ni o'chirish
+ * /likes/updateLike/{id}:
+ *   put:
  *     tags: [Likes]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema: { type: integer }
- *         example: 1
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_id: { type: integer }
+ *               product_id: { type: integer }
  *     responses:
- *       204: { description: O'chirildi }
+ *       200: { description: OK }
  */
-router.delete("/remove/:id", removeLike);
+router.put("/updateLike/:id", updateLike);
+
+/**
+ * @swagger
+ * /likes/deleteLike/{id}:
+ *   delete:
+ *     tags: [Likes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       204: { description: OK }
+ */
+router.delete("/deleteLike/:id", deleteLike);
 
 module.exports = router;

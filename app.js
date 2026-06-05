@@ -9,8 +9,8 @@ const CategoryRoute = require("./routes/category.route");
 const ProductRoute = require("./routes/product.route");
 const CartRoute = require("./routes/cart.route");
 const LikeRoute = require("./routes/like.route");
-const OrderRoute = require("./routes/order.route");
-const OrderItemRoute = require("./routes/orderItem.route");
+const SwiperRoute = require("./routes/swiper.route");
+const NewsRoute = require("./routes/news.route");
 
 const app = express();
 app.use(express.json());
@@ -21,8 +21,8 @@ app.use("/categories", CategoryRoute);
 app.use("/products", ProductRoute);
 app.use("/carts", CartRoute);
 app.use("/likes", LikeRoute);
-app.use("/orders", OrderRoute);
-app.use("/orderItems", OrderItemRoute);
+app.use("/swiper", SwiperRoute);
+app.use("/news", NewsRoute);
 
 setupSwagger(app);
 
