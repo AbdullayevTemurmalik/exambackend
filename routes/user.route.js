@@ -20,10 +20,13 @@ const { register, login, getUsers, getUserById, deleteUser } = require("../contr
  *         application/json:
  *           schema:
  *             type: object
- *             required: [name, surname, email, password]
+ *             required: [userName, firstName, lastName, email, password]
  *             properties:
- *               name: { type: string }
- *               surname: { type: string }
+ *               userName: { type: string }
+ *               firstName: { type: string }
+ *               lastName: { type: string }
+ *               gender: { type: string }
+ *               age: { type: integer }
  *               email: { type: string }
  *               password: { type: string }
  *     responses:
@@ -42,9 +45,9 @@ router.post("/register", register);
  *         application/json:
  *           schema:
  *             type: object
- *             required: [email, password]
+ *             required: [userName, password]
  *             properties:
- *               email: { type: string }
+ *               userName: { type: string }
  *               password: { type: string }
  *     responses:
  *       200: { description: OK }

@@ -28,8 +28,10 @@ setupSwagger(app);
 
 const PORT = process.env.PORT || 3000;
 
-sequelize.sync({ alter: true }).then(() => {
-  console.log("Database connected successfully.");
+sequelize.sync({ alter: true }).then(async () => {
+  await sequelize.models.Swiper.sync({ force: true });
+  await sequelize.models.News.sync({ force: true });
+  console.log("Database connected and Swiper/News tables force synced.");
   app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
     console.log(`Swagger docs: http://localhost:${PORT}/api-docs`);

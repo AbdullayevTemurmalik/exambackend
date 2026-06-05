@@ -1,9 +1,9 @@
 module.exports = (sequelize, DataType) => {
   const Card = sequelize.define("Card", {
     id: { type: DataType.INTEGER, autoIncrement: true, primaryKey: true },
-    image: { type: DataType.STRING, allowNull: true },
+    image: { type: DataType.TEXT, allowNull: true },
     price: { type: DataType.INTEGER, allowNull: false },
-    description: { type: DataType.STRING },
+    description: { type: DataType.TEXT },
     category_id: { type: DataType.INTEGER },
     discount: { type: DataType.INTEGER },
     stars: { type: DataType.INTEGER },

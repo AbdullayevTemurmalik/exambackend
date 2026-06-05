@@ -6,11 +6,14 @@ const { ValidateRegister, ValidateLogin } = require("../validation/user.validati
 exports.register = async (req, res) => {
   const { error } = ValidateRegister(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
-  const { name, surname, email, password } = req.body;
+  const { userName, firstName, lastName, gender, age, email, password } = req.body;
   try {
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) return res.status(409).json({ message: "Email band" });
-    const user = await User.create({ name, surname, email, password });
+    const existingUser = await User.findOne({ where: { userName } });
+    if (existingUser) return res.status(409).json({ message: "Username band" });
+    const existingEmail = await User.findOne({ where: { email } });
+    if (existingEmail) return res.status(409).json({ message: "Email band" });
+    
+    const user = await User.create({ userName, firstName, lastName, gender, age, email, password });
     const userResponse = user.toJSON();
     delete userResponse.password;
     res.status(201).json(userResponse);
@@ -22,14 +25,14 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   const { error } = ValidateLogin(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
-  const { email, password } = req.body;
+  const { userName, password } = req.body;
   try {
-    const user = await User.findOne({ where: { email } });
-    if (!user) return res.status(404).json({ message: "Topilmadi" });
+    const user = await User.findOne({ where: { userName } });
+    if (!user) return res.status(404).json({ message: "Foydalanuvchi topilmadi" });
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ message: "Parol xato" });
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || "secret", { expiresIn: "24h" });
-    res.status(200).json({ token, user: { id: user.id, name: user.name, surname: user.surname, email: user.email } });
+    res.status(200).json({ token, user: { id: user.id, userName: user.userName, firstName: user.firstName, lastName: user.lastName, email: user.email } });
   } catch (error) {
     res.status(500).json({ message: "Server xatosi", error: error.message });
   }
@@ -37,7 +40,7 @@ exports.login = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
   try {
-    const users = await User.findAll({ attributes: { exclude: ['password'] }, include: ["carts", "likes"] });
+    const users = await User.findAll({ attributes: { exclude: ['password'] } });
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: "Server xatosi", error: error.message });
@@ -46,7 +49,7 @@ exports.getUsers = async (req, res) => {
 
 exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findByPk(req.params.id, { attributes: { exclude: ['password'] }, include: ["carts", "likes"] });
+    const user = await User.findByPk(req.params.id, { attributes: { exclude: ['password'] } });
     if (!user) return res.status(404).json({ message: "Topilmadi" });
     res.status(200).json(user);
   } catch (error) {
