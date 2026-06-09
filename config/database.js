@@ -10,7 +10,7 @@ const sequelize = new Sequelize(
     dialect: "postgres",
     port: process.env.DB_PORT || 5432,
     logging: false,
-  }
+  },
 );
 
 module.exports = sequelize;
