@@ -14,7 +14,8 @@ exports.createCart = async (req, res) => {
 
 exports.getCarts = async (req, res) => {
   try {
-    const carts = await Cart.findAll({ include: ["user", "card"] });
+    const where = req.query.user_id ? { user_id: req.query.user_id } : {};
+    const carts = await Cart.findAll({ where, include: ["user", "card"] });
     res.status(200).json(carts);
   } catch (error) {
     res.status(500).json({ message: "Server xatosi", error: error.message });
@@ -46,7 +47,12 @@ exports.updateCart = async (req, res) => {
 
 exports.deleteCart = async (req, res) => {
   try {
-    const cart = await Cart.findByPk(req.params.id);
+    let cart;
+    if (req.query.user_id && req.query.card_id) {
+      cart = await Cart.findOne({ where: { user_id: req.query.user_id, card_id: req.query.card_id } });
+    } else {
+      cart = await Cart.findByPk(req.params.id);
+    }
     if (!cart) return res.status(404).json({ message: "Topilmadi" });
     await cart.destroy();
     res.status(204).send();

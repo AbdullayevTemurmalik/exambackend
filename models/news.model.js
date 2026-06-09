@@ -9,6 +9,10 @@ module.exports = (sequelize, DataType) => {
       type: DataType.TEXT,
       allowNull: false,
     },
+    description: {
+      type: DataType.TEXT,
+      allowNull: true,
+    },
   });
 
   return News;

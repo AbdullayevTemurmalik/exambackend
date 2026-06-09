@@ -14,7 +14,8 @@ exports.createLike = async (req, res) => {
 
 exports.getLikes = async (req, res) => {
   try {
-    const likes = await Like.findAll({ include: ["user", "card"] });
+    const where = req.query.user_id ? { user_id: req.query.user_id } : {};
+    const likes = await Like.findAll({ where, include: ["user", "card"] });
     res.status(200).json(likes);
   } catch (error) {
     res.status(500).json({ message: "Server xatosi", error: error.message });
@@ -46,7 +47,12 @@ exports.updateLike = async (req, res) => {
 
 exports.deleteLike = async (req, res) => {
   try {
-    const like = await Like.findByPk(req.params.id);
+    let like;
+    if (req.query.user_id && req.query.product_id) {
+      like = await Like.findOne({ where: { user_id: req.query.user_id, product_id: req.query.product_id } });
+    } else {
+      like = await Like.findByPk(req.params.id);
+    }
     if (!like) return res.status(404).json({ message: "Topilmadi" });
     await like.destroy();
     res.status(204).send();
@@ -54,3 +60,4 @@ exports.deleteLike = async (req, res) => {
     res.status(500).json({ message: "Server xatosi", error: error.message });
   }
 };
+
